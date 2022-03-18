@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
@@ -25,7 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests()
+		http
+			.authorizeRequests()
 			.antMatchers("/home/**")
 				.permitAll()
 			.anyRequest()
@@ -34,11 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.formLogin(form -> form
 					.loginPage("/login")
 					.defaultSuccessUrl("/usuario/pedido",true)
-					.permitAll())	 
+					.permitAll()
+					)	 
 			.logout(logout -> {
 				logout.logoutUrl("/logout")
 				.logoutSuccessUrl("/home");	
-			});
+			}).csrf().disable();
 		}
 	
 	@Override
